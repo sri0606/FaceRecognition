@@ -1,8 +1,40 @@
+#include "pch.h"
 #include "FaceRecognition.h"
+#include <wx/xml/xml.h>
 
+using namespace std;
 
-int main()
+/**
+ * Draw the face rec
+ * @param dc The device context to draw on
+ */
+void FaceRecognition::OnDraw(wxDC* dc)
 {
-	std::cout << "Hello world" << std::endl;
-	return 0;
+	// Set the background color 
+	dc->SetBackground(wxColour(0, 255, 0));
+
+	// Clear the device context with the background color
+	dc->Clear();
+	wxFont font(wxSize(0, 20),
+		wxFONTFAMILY_SWISS,
+		wxFONTSTYLE_NORMAL,
+		wxFONTWEIGHT_NORMAL);
+	dc->SetFont(font);
+	dc->SetTextForeground(wxColour(0, 64, 0));
+	dc->DrawText(L"Under the Sea!", 10, 10);
+
+	/*for (auto item : mItems)
+	{
+		item->Draw(dc);
+
+	}*/
+}
+
+/**
+ * FaceRecognition Constructor
+ */
+FaceRecognition::FaceRecognition()
+{
+	/*mBackground = make_unique<wxBitmap>(
+		L"images/background1.png", wxBITMAP_TYPE_ANY);*/
 }
