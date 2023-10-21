@@ -28,5 +28,14 @@ bool FaceRecognitionApp::OnInit()
 	frame->Initialize();
 	frame->Show(true);
 
+	// Load the application icon from the icon file
+	wxString iconFilePath = wxT("images/fac_rec_logo.ico");
+	wxIcon appIcon;
+	appIcon.CopyFromBitmap(wxBitmap(iconFilePath, wxBITMAP_TYPE_ICO));
+
+	// Set the application icon
+	SetTopWindow(frame); 
+	frame->SetIcon(appIcon);
+
 	return true;
 }
