@@ -19,7 +19,7 @@ __MACOSX
 *.lo
 *.o
 *.obj
-
+*.vs
 # Precompiled Headers
 *.gch
 *.pch
@@ -43,3 +43,7 @@ __MACOSX
 *.exe
 *.out
 *.app
+
+out*
+CMakeFiles*
+*.cmake
