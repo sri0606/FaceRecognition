@@ -13,4 +13,3 @@ project ("FaceRecognition")
 
 # Include sub-projects.
 add_subdirectory ("FaceRecognition")
-

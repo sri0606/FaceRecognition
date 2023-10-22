@@ -1,0 +1,10 @@
+
+
+class Image
+{
+
+private:
+
+public:
+
+};

@@ -9,13 +9,15 @@ set(CMAKE_CXX_STANDARD 17)
 # Turn off wxWidgets own precompiled header system, since
 # it doesn't seem to work. The CMake version works much better.
 set(wxBUILD_PRECOMP OFF)
-set(wxWidgets_DIR "C:/wxWidgets-3.2.1/lib")
-set(CMAKE_PREFIX_PATH "C:/wxWidgets-3.2.1")
 find_package(wxWidgets COMPONENTS core base xrc html xml )
+#set(CMAKE_PREFIX_PATH "C:/Program Files/opencv")  # Specify the directory containing OpenCVConfig.cmake
+# or
+set(OpenCV_DIR "C:/Program Files/opencv/build/")
 
+find_package(OpenCV CONFIG REQUIRED)
 
 # Include the wxWidgets use file to initialize various settings
-include(${wxWidgets_USE_FILE})
+include(${wxWidgets_USE_FILE} ${OpenCV_USE_FILE})
 
 add_subdirectory(${APPLICATION_LIBRARY})
 include_directories(${APPLICATION_LIBRARY})
@@ -25,8 +27,10 @@ set(SOURCE_FILES main.cpp FaceRecognitionApp.cpp FaceRecognitionApp.h pch.h )
 
 add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${SOURCE_FILES})
 
+#include DIRECTORIES
+#target_include_directories(main PRIVATE ${OpenCV_INCLUDE_DIRS})
 # Link required libraries to the executable
-target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${APPLICATION_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${APPLICATION_LIBRARY} ${OpenCV_LIBS})
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
 
