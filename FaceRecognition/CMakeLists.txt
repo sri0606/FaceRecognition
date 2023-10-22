@@ -10,14 +10,13 @@ set(CMAKE_CXX_STANDARD 17)
 # it doesn't seem to work. The CMake version works much better.
 set(wxBUILD_PRECOMP OFF)
 find_package(wxWidgets COMPONENTS core base xrc html xml )
-#set(CMAKE_PREFIX_PATH "C:/Program Files/opencv")  # Specify the directory containing OpenCVConfig.cmake
-# or
-set(OpenCV_DIR "C:/Program Files/opencv/build/")
+
+set(OpenCV_DIR "C:/Program Files/opencv/build")
 
 find_package(OpenCV CONFIG REQUIRED)
 
 # Include the wxWidgets use file to initialize various settings
-include(${wxWidgets_USE_FILE} ${OpenCV_USE_FILE})
+include(${wxWidgets_USE_FILE})
 
 add_subdirectory(${APPLICATION_LIBRARY})
 include_directories(${APPLICATION_LIBRARY})

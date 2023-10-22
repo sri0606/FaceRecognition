@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "FaceRecognition.h"
 #include <wx/xml/xml.h>
+#include "Image.h"
 
 using namespace std;
 
@@ -37,4 +38,19 @@ FaceRecognition::FaceRecognition()
 {
 	/*mBackground = make_unique<wxBitmap>(
 		L"images/background1.png", wxBITMAP_TYPE_ANY);*/
+}
+
+/**
+*/
+void FaceRecognition::Save(const wxString& filename)
+{
+}
+
+void FaceRecognition::Load(const wxString& filename)
+{
+	mImage = new Image(filename);
+}
+
+void FaceRecognition::Clear()
+{
 }

@@ -3,7 +3,7 @@ project(FaceRecognitionLib)
 set(SOURCE_FILES FaceRecognition.cpp FaceRecognition.h MainFrame.h MainFrame.cpp pch.h ids.h FaceRecognitionView.h FaceRecognitionView.cpp Image.h Image.cpp)
 set(wxBUILD_PRECOMP OFF)
 find_package(wxWidgets COMPONENTS core base xrc html xml REQUIRED)
-set(OpenCV_DIR "C:/Program Files/opencv/build/")
+set(OpenCV_DIR "C:/Program Files/opencv/build")
 find_package(OpenCV REQUIRED)
 
 include(${wxWidgets_USE_FILE})

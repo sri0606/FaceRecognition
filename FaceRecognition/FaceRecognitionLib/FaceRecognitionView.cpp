@@ -13,8 +13,23 @@ void FaceRecognitionView::Initialize(wxFrame* parent)
 	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileOpen, this, wxID_OPEN);
 }
 
+/**
+* File>Open menu handler
+ * @param event Menu event
+*/
 void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 {
+	wxFileDialog loadFileDialog(this, L"Load Image", L"", L"",
+		L"Image Files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.ico|All Files|*.*", wxFD_OPEN);
+
+	if (loadFileDialog.ShowModal() == wxID_CANCEL)
+	{
+		return;
+	}
+
+	auto filename = loadFileDialog.GetPath();
+	mFaceRecognition.Load(filename);
+	Refresh();
 }
 
 void FaceRecognitionView::OnFileSaveAs(wxCommandEvent& event)
