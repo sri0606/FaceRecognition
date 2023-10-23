@@ -1,18 +1,22 @@
 #pragma once
 
 # include <iostream>
-#include "Image.h"
+#include "Item.h"
 
 class FaceRecognition
 {
 private:
-	std::unique_ptr<wxBitmap> mBackground;  ///< Background image to use
-	Image* mImage;
+
+	//item we want implement face recogniton on
+	std::shared_ptr<Item> mItem;
+
 
 public:
 	void OnDraw(wxDC* dc);
-	FaceRecognition();
+	FaceRecognition(wxWindow* window, wxFrame* frame);
+	FaceRecognition() = delete;
 	void Save(const wxString& filename);
-	void Load(const wxString& filename);
+	void Load(wxWindow* parent,const wxString& filename);
 	void Clear();
+
 };
