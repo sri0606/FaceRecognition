@@ -2,15 +2,24 @@
 #include "pch.h"
 #include "FaceRecognitionView.h"
 #include <wx/dcbuffer.h>
+#include "FaceRecognition.h"
 
-void FaceRecognitionView::Initialize(wxFrame* parent)
+FaceRecognitionView::FaceRecognitionView(wxFrame* parent) :
+	wxScrolledCanvas(parent,
+		wxID_ANY)
 {
-	Create(parent, wxID_ANY);
+
 	SetBackgroundStyle(wxBG_STYLE_PAINT);
 	Bind(wxEVT_PAINT, &FaceRecognitionView::OnPaint, this);
 
 	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileSaveAs, this, wxID_SAVEAS);
 	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileOpen, this, wxID_OPEN);
+
+	mFaceRecognition = new FaceRecognition(this,parent);
+}
+
+void FaceRecognitionView::UpdateObserver()
+{
 }
 
 /**
@@ -28,7 +37,7 @@ void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 	}
 
 	auto filename = loadFileDialog.GetPath();
-	mFaceRecognition.Load(filename);
+	mFaceRecognition->Load(this,filename);
 	Refresh();
 }
 
@@ -45,9 +54,10 @@ void FaceRecognitionView::OnPaint(wxPaintEvent& event)
 	wxAutoBufferedPaintDC dc(this);
 
 
-	wxBrush background(*wxBLACK);
+	wxBrush background(*wxWHITE);
 	dc.SetBackground(background);
 	dc.Clear();
 
-	//mAquarium.OnDraw(&dc);
+	mFaceRecognition->OnDraw(&dc);
 }
+
