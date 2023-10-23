@@ -1,14 +1,20 @@
 #pragma once
+
+#include "Item.h"
 /**
 
 */
-class Image
+class Image: public Item
 {
 
 private:
-	wxString mPath;
+	wxImage mImage;
+	wxImage LoadImage(const wxString& imagePath);
 public:
 
-	Image(const wxString& filename);
+	Image(wxWindow* parent, const wxString& filename);
+	virtual void Process(wxDC* dc) override;
+	virtual void Draw(wxDC* dc) override;
+	void SetImage(const wxString& imagePath);
 
 };
