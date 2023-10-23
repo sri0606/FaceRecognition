@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "MainFrame.h"
 #include "FaceRecognitionView.h"
+#include "FaceDetectionView.h"
 #include "ids.h"
 
 /**
@@ -17,11 +18,13 @@ void MainFrame::Initialize()
 	auto sizer = new wxBoxSizer(wxVERTICAL);
 
 	// Create the view class object as a child of MainFrame
-	auto facerecognitionView = new FaceRecognitionView();
-	facerecognitionView->Initialize(this);
+	mFaceRecognitionView = new FaceRecognitionView(this);
+	mFaceDetectionView = new FaceDetectionView(this);
 
-	// Add it to the sizer
-	sizer->Add(facerecognitionView, 1, wxEXPAND | wxALL);
+	sizer->Add(mFaceRecognitionView, 1, wxEXPAND | wxALL);
+	sizer->Add(mFaceDetectionView, 0, wxEXPAND | wxALL);
+
+
 
 	// Set the sizer for this frame
 	SetSizer(sizer);
