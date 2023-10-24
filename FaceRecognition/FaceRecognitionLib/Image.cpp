@@ -99,7 +99,7 @@ void Image::DetectFaces()
 
     // Detect faces
     std::vector<cv::Rect> faces;
-    face_cascade.detectMultiScale(gray_image, faces, 1.1, 3, 0, cv::Size(30, 30));
+    face_cascade.detectMultiScale(gray_image, faces, 1.1, 3, 0);
 
     // Extract and display detected faces
     for (size_t i = 0; i < faces.size(); i++) {
@@ -109,6 +109,10 @@ void Image::DetectFaces()
         wxImage* wxImg = MatToImage(face);
         std::shared_ptr<wxImage> wxImgShared(wxImg); // Convert to shared_ptr
         mFaceRecognition->AddDetectedFaces(wxImgShared);
+
+        // Optionally, you can save each face as a separate image
+        std::string face_filename = "face_" + std::to_string(i) + ".jpg";
+        cv::imwrite(face_filename, face);
 
     }
     // Display the original image with rectangles around detected faces

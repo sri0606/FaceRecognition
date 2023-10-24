@@ -53,6 +53,7 @@ void FaceRecognition::Load(const wxString& filename)
 {
 	mItem = std::make_unique<Image>(filename,this);
     UpdateObservers();
+    
 }
 
 void FaceRecognition::Clear()

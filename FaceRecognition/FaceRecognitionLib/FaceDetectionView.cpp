@@ -45,7 +45,7 @@ void FaceDetectionView::AddDetectedFace(std::shared_ptr<wxImage> faceImage)
  */
 void FaceDetectionView::OnPaint(wxPaintEvent& event)
 {
-
+    
     wxAutoBufferedPaintDC dc(this);
     DoPrepareDC(dc);
 
@@ -66,7 +66,7 @@ void FaceDetectionView::OnPaint(wxPaintEvent& event)
         double aspectRatio = width / height;
 
         // Calculate the new height to fit a specific width (e.g., 100 pixels)
-        double newWidth = 100.0;
+        double newWidth = 200.0;
         double newHeight = newWidth / aspectRatio;
 
         // Rescale the image with a specific quality option (you can choose the one you prefer)
