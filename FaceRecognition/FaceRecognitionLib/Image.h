@@ -1,5 +1,5 @@
 #pragma once
-
+#include <opencv2/opencv.hpp>
 #include "Item.h"
 /**
 
@@ -9,12 +9,14 @@ class Image: public Item
 
 private:
 	wxImage mImage;
+	wxImage* MatToImage(const cv::Mat& mat);
 	wxImage LoadImage(const wxString& imagePath);
 public:
 
-	Image(wxWindow* parent, const wxString& filename);
-	virtual void Process(wxDC* dc) override;
-	virtual void Draw(wxDC* dc) override;
+	Image( const wxString& filename, FaceRecognition* facrec);
+	virtual void Process() override;
+	virtual void Draw(std::shared_ptr<wxGraphicsContext> graphics) override;
 	void SetImage(const wxString& imagePath);
-
+	virtual void DetectFaces() override;
+	virtual void SetFaceRecognition(FaceRecognition* facrec) override{ mFaceRecognition = facrec; }
 };

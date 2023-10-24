@@ -5,16 +5,17 @@
 /**
  *COnstructor for Item class
 */
-Item::Item(wxWindow* parent, const wxString& filename)
+Item::Item(const wxString& filename, FaceRecognition* facrec)
 {
 	mPath = filename;
+	mFaceRecognition = facrec;
 }
 
-void Item::Draw(wxDC* dc)
+void Item::Draw(std::shared_ptr<wxGraphicsContext> graphics)
 {
 }
 
-void Item::Process(wxDC* dc)
+void Item::Process()
 {
 }
 
