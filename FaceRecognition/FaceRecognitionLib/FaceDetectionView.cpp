@@ -33,6 +33,11 @@ void FaceDetectionView::UpdateObserver()
     Update();
 }
 
+void FaceDetectionView::AddDetectedFace(std::shared_ptr<wxImage> faceImage)
+{
+    mDetectedFaces.push_back(faceImage);
+}
+
 
 /**
  * Paint event, draws the window.
@@ -50,4 +55,28 @@ void FaceDetectionView::OnPaint(wxPaintEvent& event)
 
     // Create a graphics context
     auto graphics = std::shared_ptr<wxGraphicsContext>(wxGraphicsContext::Create(dc));
+
+    double x = 10;
+    double y = 10;
+
+    for (auto &face : mDetectedFaces) {
+        // Calculate the dimensions and aspect ratio
+        double width = face->GetWidth();
+        double height = face->GetHeight();
+        double aspectRatio = width / height;
+
+        // Calculate the new height to fit a specific width (e.g., 100 pixels)
+        double newWidth = 100.0;
+        double newHeight = newWidth / aspectRatio;
+
+        // Rescale the image with a specific quality option (you can choose the one you prefer)
+        wxImage scaledImage = face->Rescale(newWidth, newHeight, wxIMAGE_QUALITY_HIGH);
+
+        // Draw the image on the graphics context
+        auto bitmap = graphics->CreateBitmapFromImage(scaledImage);
+        graphics->DrawBitmap(bitmap, x, y, newWidth, newHeight);
+
+        // Update the position for the next image
+        x += newWidth + 10; // Add some spacing between images
+    }
 }
