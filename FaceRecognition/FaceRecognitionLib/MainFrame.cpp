@@ -4,7 +4,7 @@
 #include "FaceRecognitionView.h"
 #include "FaceDetectionView.h"
 #include "ids.h"
-
+#include "FaceRecognition.h"
 /**
  * Initialize the MainFrame window.
  */
@@ -24,7 +24,10 @@ void MainFrame::Initialize()
 	sizer->Add(mFaceRecognitionView, 1, wxEXPAND | wxALL);
 	sizer->Add(mFaceDetectionView, 0, wxEXPAND | wxALL);
 
+	auto faceRecognition = std::make_shared<FaceRecognition>();
 
+	mFaceDetectionView->SetFaceRecognition(faceRecognition);
+	mFaceRecognitionView->SetFaceRecognition(faceRecognition);
 
 	// Set the sizer for this frame
 	SetSizer(sizer);
