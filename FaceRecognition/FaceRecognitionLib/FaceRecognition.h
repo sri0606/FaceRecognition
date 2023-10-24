@@ -2,21 +2,27 @@
 
 # include <iostream>
 #include "Item.h"
+class Observer;
 
 class FaceRecognition
-{
+{	
 private:
 
 	//item we want implement face recogniton on
-	std::shared_ptr<Item> mItem;
+	std::unique_ptr<Item> mItem;
+
+	/// The observers of this picture
+	std::vector<Observer*> mObservers;
 
 
 public:
-	void OnDraw(wxDC* dc);
-	FaceRecognition(wxWindow* window, wxFrame* frame);
-	FaceRecognition() = delete;
+	void OnDraw(std::shared_ptr<wxGraphicsContext> graphics);
+	FaceRecognition();
 	void Save(const wxString& filename);
-	void Load(wxWindow* parent,const wxString& filename);
+	void Load(const wxString& filename);
 	void Clear();
-
+	void AddObserver(Observer* observer);
+	void RemoveObserver(Observer* observer);
+	void UpdateObservers();
+	void AddDetectedFaces(std::shared_ptr<wxImage> faceImage);
 };
