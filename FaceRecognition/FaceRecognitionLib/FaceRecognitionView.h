@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Observer.h"
-class FaceRecognition;
 
 /**
  * Class that defines our Aquarium view
@@ -9,8 +8,6 @@ class FaceRecognition;
 class FaceRecognitionView final : public wxScrolledCanvas, public Observer
 {
 private:
-	/// An object that describes our aquarium
-	FaceRecognition* mFaceRecognition;
 	void OnPaint(wxPaintEvent& event);
 
 
@@ -25,4 +22,10 @@ public:
 
 	void OnFileOpen(wxCommandEvent& event);
 	void OnFileSaveAs(wxCommandEvent& event);
+
+
+	/**
+	 * Add the face that has been detected
+	*/
+	virtual void AddDetectedFace(std::shared_ptr<wxImage> faceImage) {}
 };

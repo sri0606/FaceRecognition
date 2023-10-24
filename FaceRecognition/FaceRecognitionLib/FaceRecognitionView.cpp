@@ -2,24 +2,24 @@
 #include "pch.h"
 #include "FaceRecognitionView.h"
 #include <wx/dcbuffer.h>
+#include <wx/graphics.h>
 #include "FaceRecognition.h"
 
 FaceRecognitionView::FaceRecognitionView(wxFrame* parent) :
 	wxScrolledCanvas(parent,
 		wxID_ANY)
 {
-
+		
 	SetBackgroundStyle(wxBG_STYLE_PAINT);
 	Bind(wxEVT_PAINT, &FaceRecognitionView::OnPaint, this);
 
 	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileSaveAs, this, wxID_SAVEAS);
 	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileOpen, this, wxID_OPEN);
-
-	mFaceRecognition = new FaceRecognition(this,parent);
 }
 
 void FaceRecognitionView::UpdateObserver()
 {
+	Refresh();
 }
 
 /**
@@ -37,7 +37,7 @@ void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 	}
 
 	auto filename = loadFileDialog.GetPath();
-	mFaceRecognition->Load(this,filename);
+	mFaceRecognition->Load(filename);
 	Refresh();
 }
 
@@ -52,12 +52,16 @@ void FaceRecognitionView::OnFileSaveAs(wxCommandEvent& event)
 void FaceRecognitionView::OnPaint(wxPaintEvent& event)
 {
 	wxAutoBufferedPaintDC dc(this);
-
+	DoPrepareDC(dc);
 
 	wxBrush background(*wxWHITE);
 	dc.SetBackground(background);
 	dc.Clear();
 
-	mFaceRecognition->OnDraw(&dc);
+	// Create a graphics context
+	auto graphics = std::shared_ptr<wxGraphicsContext>(wxGraphicsContext::Create(dc));
+	graphics->DrawRectangle(0, 0, GetSize().x, GetSize().y);
+
+	mFaceRecognition->OnDraw(graphics);
 }
 
