@@ -1,5 +1,6 @@
 #pragma once
-class FaceRecognition;
+
+#include "FaceRecognition.h"
 
 /**
  * Observer base class for a picture.
@@ -9,12 +10,13 @@ class FaceRecognition;
  */
 class Observer {
 private:
-    /// Picture we are observing
-    //std::shared_ptr<FaceRecognition> mFaceRecogntion;
+  
 
 protected:
     /// Constructor (protected)
     Observer() {}
+    /// Picture we are observing
+    std::shared_ptr<FaceRecognition> mFaceRecognition;
 
 public:
     /// Copy constructor (disabled)
@@ -28,11 +30,16 @@ public:
     /// This function is called to update any observers
     virtual void UpdateObserver() = 0;
 
-    //virtual void SetFaceRecognition(std::shared_ptr<Picture> picture);
+    virtual void SetFaceRecognition(std::shared_ptr<FaceRecognition> facrec);
 
     /**
      * Get the picture we are observing
      * @return Pointer to picture we are observing
      */
-     //std::shared_ptr<Picture> GetPicture() { return mPicture; }
+     std::shared_ptr<FaceRecognition> GetFaceRecognition() { return mFaceRecognition; }
+
+     /**
+      * Add the face that has been detected
+     */
+     virtual void AddDetectedFace(std::shared_ptr<wxImage> faceImage){}
 };
