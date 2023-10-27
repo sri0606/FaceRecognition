@@ -9,7 +9,6 @@ class Image: public Item
 
 private:
 	wxImage mImage;
-	wxImage* MatToImage(const cv::Mat& mat);
 	wxImage LoadImage(const wxString& imagePath);
 public:
 

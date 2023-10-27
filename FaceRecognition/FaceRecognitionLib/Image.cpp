@@ -1,7 +1,6 @@
 
 #include "pch.h"
 #include "Image.h"
-#include <opencv2/opencv.hpp>
 #include <wx/splitter.h>
 #include <wx/graphics.h>
 #include "Item.h"
@@ -87,7 +86,7 @@ void Image::DetectFaces()
     // Initialize face detection classifier
     cv::CascadeClassifier face_cascade;
     // Load pre-trained XML classifier for face detection
-    if (!face_cascade.load("haarcascade_frontalface_default.xml")) {
+    if (!face_cascade.load("C:/Program Files/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml")) {
         std::cerr << "Error loading face cascade." << std::endl;
         return ;
     }
@@ -105,42 +104,9 @@ void Image::DetectFaces()
     for (size_t i = 0; i < faces.size(); i++) {
         // Crop the detected face region
         cv::Mat face = image(faces[i]);
-
-        wxImage* wxImg = MatToImage(face);
-        std::shared_ptr<wxImage> wxImgShared(wxImg); // Convert to shared_ptr
-        mFaceRecognition->AddDetectedFaces(wxImgShared);
-
-        // Optionally, you can save each face as a separate image
-        std::string face_filename = "face_" + std::to_string(i) + ".jpg";
-        cv::imwrite(face_filename, face);
+        mFaceRecognition->AddDetectedFaces(face);
 
     }
-    // Display the original image with rectangles around detected faces
-    for (const auto& face : faces) {
-        cv::rectangle(image, face, cv::Scalar(0, 0, 255), 2);
-    }
-    mImage = *MatToImage(image);
-}
-
-
-
-
-// Function to convert a cv::Mat to wxImage
-wxImage* Image::MatToImage(const cv::Mat& mat) {
-    if (mat.empty()) {
-        return nullptr; // Return an empty image if the input is empty
-    }
-
-    cv::Mat rgbMat; // Create an RGB version of the image (if it's not in RGB format)
-    if (mat.channels() == 1) {
-        cv::cvtColor(mat, rgbMat, cv::COLOR_GRAY2BGR);
-    }
-    else {
-        rgbMat = mat;
-    }
-
-    auto image = new wxImage(rgbMat.cols, rgbMat.rows, rgbMat.data, true); // Create a wxImage from the pixel data
-    return image;
 }
 
 
