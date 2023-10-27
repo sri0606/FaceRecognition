@@ -97,7 +97,7 @@ void FaceRecognition::UpdateObservers()
 /**
 *   Add the faces taht are detected to observer
 */
-void FaceRecognition::AddDetectedFaces(std::shared_ptr<wxImage> faceImage)
+void FaceRecognition::AddDetectedFaces(cv::Mat faceImage)
 {
     for (auto observer : mObservers) {
         observer->AddDetectedFace(faceImage);

@@ -24,5 +24,5 @@ public:
 	void AddObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);
 	void UpdateObservers();
-	void AddDetectedFaces(std::shared_ptr<wxImage> faceImage);
+	void AddDetectedFaces(cv::Mat faceImage);
 };
