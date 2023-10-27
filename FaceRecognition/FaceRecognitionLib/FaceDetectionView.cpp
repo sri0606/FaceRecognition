@@ -2,6 +2,7 @@
 #include <wx/dcbuffer.h>
 #include <wx/graphics.h>
 #include "FaceDetectionView.h"
+#include "convertmattowxbmp.h"
 
 /**
  * Constructor
@@ -33,7 +34,7 @@ void FaceDetectionView::UpdateObserver()
     Update();
 }
 
-void FaceDetectionView::AddDetectedFace(std::shared_ptr<wxImage> faceImage)
+void FaceDetectionView::AddDetectedFace(cv::Mat faceImage)
 {
     mDetectedFaces.push_back(faceImage);
 }
@@ -45,7 +46,8 @@ void FaceDetectionView::AddDetectedFace(std::shared_ptr<wxImage> faceImage)
  */
 void FaceDetectionView::OnPaint(wxPaintEvent& event)
 {
-    
+    SetVirtualSize(10, 0);
+    SetScrollRate(1, 0);
     wxAutoBufferedPaintDC dc(this);
     DoPrepareDC(dc);
 
@@ -55,28 +57,32 @@ void FaceDetectionView::OnPaint(wxPaintEvent& event)
 
     // Create a graphics context
     auto graphics = std::shared_ptr<wxGraphicsContext>(wxGraphicsContext::Create(dc));
+    // Get the dimensions of the graphics context
+    double contextWidth, contextHeight;
+    graphics->GetSize(&contextWidth, &contextHeight);
 
     double x = 10;
     double y = 10;
 
+    double scaleX, scaleY, scaleFactor = 0;
+    int newWidth, newHeight;
+
     for (auto &face : mDetectedFaces) {
-        // Calculate the dimensions and aspect ratio
-        double width = face->GetWidth();
-        double height = face->GetHeight();
-        double aspectRatio = width / height;
+        
+        //Calculate the scaling factors to fit the image within the context while maintaining aspect ratio
+        scaleX = contextWidth / face.cols;
+        scaleY = contextHeight / face.rows;
+        scaleFactor = std::min(scaleX, scaleY);
 
-        // Calculate the new height to fit a specific width (e.g., 100 pixels)
-        double newWidth = 200.0;
-        double newHeight = newWidth / aspectRatio;
+        // Calculate the new dimensions
+        newWidth = static_cast<int>(face.cols * scaleFactor);
+        newHeight = static_cast<int>(face.rows * scaleFactor);
 
-        // Rescale the image with a specific quality option (you can choose the one you prefer)
-        wxImage scaledImage = face->Rescale(newWidth, newHeight, wxIMAGE_QUALITY_HIGH);
-
-        // Draw the image on the graphics context
-        auto bitmap = graphics->CreateBitmapFromImage(scaledImage);
+        wxBitmap bitmap(face.cols,face.rows,24);
+        ConvertMatBitmapTowxBitmap(face,bitmap);
         graphics->DrawBitmap(bitmap, x, y, newWidth, newHeight);
 
         // Update the position for the next image
-        x += newWidth + 10; // Add some spacing between images
+        x += newWidth + 5; // Add some spacing between images
     }
 }

@@ -12,7 +12,7 @@ private:
     void OnPaint(wxPaintEvent& event);
     //void OnTimer(wxTimerEvent& event);
 
-    std::vector<std::shared_ptr<wxImage>> mDetectedFaces;
+    std::vector<cv::Mat> mDetectedFaces;
 public:
     static const int Height = 90;      ///< Height to make this window
 
@@ -24,5 +24,5 @@ public:
     /**
       * Add the face that has been detected
      */
-    virtual void AddDetectedFace(std::shared_ptr<wxImage> faceImage) override;
+    virtual void AddDetectedFace(cv::Mat faceImage) override;
 };
