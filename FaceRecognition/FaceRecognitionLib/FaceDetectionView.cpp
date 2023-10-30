@@ -31,7 +31,22 @@ FaceDetectionView::FaceDetectionView(wxFrame* parent) :
 void FaceDetectionView::UpdateObserver()
 {
     Refresh();
-    Update();
+    //Update();
+}
+
+
+/**
+* File>Open menu handler
+ * @param event Menu event
+*/
+void FaceDetectionView::OnFileOpen(wxCommandEvent& event)
+{
+    /*mDetectedFaces.clear();*/
+    UpdateObserver();
+}
+
+void FaceDetectionView::OnFileSaveAs(wxCommandEvent& event)
+{
 }
 
 void FaceDetectionView::AddDetectedFace(cv::Mat faceImage)
@@ -85,4 +100,5 @@ void FaceDetectionView::OnPaint(wxPaintEvent& event)
         // Update the position for the next image
         x += newWidth + 5; // Add some spacing between images
     }
+    mDetectedFaces.clear();
 }

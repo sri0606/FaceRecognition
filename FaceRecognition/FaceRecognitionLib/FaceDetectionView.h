@@ -6,13 +6,11 @@
  */
 class FaceDetectionView final : public wxScrolledCanvas, public Observer {
 private:
-  /*  void OnLeftDown(wxMouseEvent& event);
-    void OnLeftUp(wxMouseEvent& event);
-    void OnMouseMove(wxMouseEvent& event);*/
-    void OnPaint(wxPaintEvent& event);
-    //void OnTimer(wxTimerEvent& event);
 
-    std::vector<cv::Mat> mDetectedFaces;
+     virtual void OnPaint(wxPaintEvent& event) override;
+
+    
+
 public:
     static const int Height = 90;      ///< Height to make this window
 
@@ -25,4 +23,7 @@ public:
       * Add the face that has been detected
      */
     virtual void AddDetectedFace(cv::Mat faceImage) override;
+
+    virtual void OnFileOpen(wxCommandEvent& event) override;
+    virtual void OnFileSaveAs(wxCommandEvent& event) override;
 };
