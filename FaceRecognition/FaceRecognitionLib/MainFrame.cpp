@@ -22,7 +22,7 @@ void MainFrame::Initialize()
 	mFaceDetectionView = new FaceDetectionView(this);
 
 	sizer->Add(mFaceRecognitionView, 1, wxEXPAND | wxALL);
-	sizer->Add(mFaceDetectionView, 0, wxEXPAND | wxALL);
+	sizer->Add(mFaceDetectionView, 1, wxEXPAND | wxALL);
 
 	auto faceRecognition = std::make_shared<FaceRecognition>();
 
@@ -41,8 +41,8 @@ void MainFrame::Initialize()
 	auto helpMenu = new wxMenu();
 
 	fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit this program");
-	fileMenu->Append(wxID_SAVEAS, "Save &As...\tCtrl-S", L"Save aquarium as...");
-	fileMenu->Append(wxID_OPEN, "Open &File...\tCtrl-F", L"Open aquarium file...");
+	fileMenu->Append(wxID_SAVEAS, "Save &As...\tCtrl-S", L"Save as...");
+	fileMenu->Append(wxID_OPEN, "Open &File...\tCtrl-F", L"Open file...");
 
 	helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
