@@ -8,7 +8,7 @@
 class FaceRecognitionView final : public wxScrolledCanvas, public Observer
 {
 private:
-	void OnPaint(wxPaintEvent& event);
+	virtual void OnPaint(wxPaintEvent& event) override;
 
 
 public:
@@ -20,8 +20,8 @@ public:
 
 	void UpdateObserver() override;
 
-	void OnFileOpen(wxCommandEvent& event);
-	void OnFileSaveAs(wxCommandEvent& event);
+	virtual void OnFileOpen(wxCommandEvent& event) override;
+	virtual void OnFileSaveAs(wxCommandEvent& event) override;
 
 
 	/**

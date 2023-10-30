@@ -38,7 +38,7 @@ void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 
 	auto filename = loadFileDialog.GetPath();
 	mFaceRecognition->Load(filename);
-	Refresh();
+	UpdateObserver();
 }
 
 void FaceRecognitionView::OnFileSaveAs(wxCommandEvent& event)
