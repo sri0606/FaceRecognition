@@ -17,7 +17,7 @@ public:
     static const int Height = 90;      ///< Height to make this window
 
 
-    FaceDetectionView(wxFrame* parent);
+    FaceDetectionView(wxPanel* parent);
 
     void UpdateObserver() override;
 

@@ -5,16 +5,16 @@
 #include <wx/graphics.h>
 #include "FaceRecognition.h"
 
-FaceRecognitionView::FaceRecognitionView(wxFrame* parent) :
+FaceRecognitionView::FaceRecognitionView(wxPanel* parent) :
 	wxScrolledCanvas(parent,
 		wxID_ANY)
 {
-		
+	
 	SetBackgroundStyle(wxBG_STYLE_PAINT);
 	Bind(wxEVT_PAINT, &FaceRecognitionView::OnPaint, this);
 
-	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileSaveAs, this, wxID_SAVEAS);
-	parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileOpen, this, wxID_OPEN);
+	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileSaveAs, this, wxID_SAVEAS);
+	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileOpen, this, wxID_OPEN);
 }
 
 void FaceRecognitionView::UpdateObserver()

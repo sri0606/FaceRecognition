@@ -12,7 +12,7 @@ private:
 
 
 public:
-	FaceRecognitionView(wxFrame* parent);
+	FaceRecognitionView(wxPanel* parent);
 	//void OnMouseMove(wxMouseEvent& event);
 	//void OnLeftUp(wxMouseEvent& event);
 	//void OnLeftDown(wxMouseEvent& event);

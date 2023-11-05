@@ -9,7 +9,7 @@
  * @param parent The main wxFrame object
  * 
  */
-FaceDetectionView::FaceDetectionView(wxFrame* parent) :
+FaceDetectionView::FaceDetectionView(wxPanel* parent) :
     wxScrolledCanvas(parent,
         wxID_ANY,
         wxDefaultPosition,
