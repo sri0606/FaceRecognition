@@ -6,13 +6,14 @@
 
 ## Overview
 
-The Face Recognition and Privacy Analysis Tool is an open-source software application developed with the primary goal of providing advanced face and object recognition capabilities. While its current focus is on recognizing faces and objects in various media elements, including images, videos, and documents, its long-term vision includes becoming a powerful privacy analysis tool. The inspiration for this tool is the growing concern regarding data privacy and the potential misuse of facial recognition technology.
+This is a Face Recognition and Privacy Analysis Tool, a software application developed with the primary goal of providing face and object recognition capabilities. While its current focus is on recognizing faces and objects in various media elements, including images, videos, and documents, its long-term vision includes becoming a powerful privacy analysis tool. The inspiration for this tool is the growing concern regarding data privacy and the potential misuse of facial recognition technology.
 
 ## Features
 
 ### Face and Object Recognition
 
-Our application boasts a user-friendly interface and combines simplicity with powerful features. At its core, this software excels in providing robust face and object detection capabilities. Users can harness its potential to thoroughly analyze various media elements, enabling them to identify and work with faces and objects effortlessly. Additionally, the application offers a rich array of features, including in-app editing, downloading, and screen-time score.
+Our application boasts a user-friendly interface and combines simplicity with powerful features. At its core, this software excels in providing robust face and object detection capabilities. Users can use its potential to thoroughly analyze various media elements, enabling them to identify and work with faces and objects. Additionally, the application aims to offer a rich array of features, including in-app editing, downloading, and screen-time score.
+
 
 ### Data Privacy Analysis (Upcoming)
 
@@ -36,7 +37,7 @@ Our vision for the application extends beyond face recognition. We aim to build 
 
 ## Contribution
 
-We welcome contributions from developers, data scientists, and anyone interested in enhancing this application. Feel free to fork the repository, submit pull requests, or open issues to help us improve the tool and achieve its objectives.
+We welcome contributions from developers and anyone interested in enhancing this application. Feel free to fork the repository, submit pull requests, or open issues to help us improve the tool and achieve its objectives.
 
 Thank you for your interest in the Face Recognition and Privacy Analysis Tool. Together, we can make a difference in understanding and addressing data privacy issues related to facial recognition.
 
@@ -50,6 +51,9 @@ The application relies on several key dependencies to function effectively:
 
 - **C++**: The core programming language used for developing the application.
   
+### A preview of user-interface of current version
+<img src="FaceRecognition/images/testimage_results.png" width="800" height="400" alt="Image">
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE), which means you are free to use, modify, and distribute the application as long as you adhere to the terms and conditions specified in the license.
