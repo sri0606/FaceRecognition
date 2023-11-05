@@ -10,4 +10,5 @@ include(${wxWidgets_USE_FILE})
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
+#target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${OpenCV_LIBS})
