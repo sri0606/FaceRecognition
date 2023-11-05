@@ -5,8 +5,10 @@
 #include <wx/graphics.h>
 #include "Item.h"
 #include "FaceRecognition.h"
+#include "convertmattowxbmp.h"
 using namespace cv;
 
+std::string faceCascadePath = "C:/Program Files/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml";
 
 /**
  * Image Constructor
@@ -28,13 +30,6 @@ void Image::Process()
         wxLogError("Failed to load the image from path: %s", mPath);
         return;
     }
-
-    // Convert the OpenCV image to a wxImage
-    mImage = wxImage(originalImage.cols, originalImage.rows, originalImage.data, true);
-    if (!mImage.IsOk()) {
-        wxLogError("Failed to convert OpenCV image to wxImage.");
-        return;
-    }
 }
 
 
@@ -44,8 +39,11 @@ void Image::Draw(std::shared_ptr<wxGraphicsContext> graphics)
     double contextWidth, contextHeight;
     graphics->GetSize(&contextWidth, &contextHeight);
 
+    // half-width of window
+    int halfWidth = static_cast<int>(contextWidth / 2.0);
+
     // Calculate the scaling factors to fit the image within the context while maintaining aspect ratio
-    double scaleX = contextWidth / mImage.GetWidth();
+    double scaleX = halfWidth / mImage.GetWidth();
     double scaleY = contextHeight / mImage.GetHeight();
     double scaleFactor = std::min(scaleX, scaleY);
 
@@ -53,12 +51,17 @@ void Image::Draw(std::shared_ptr<wxGraphicsContext> graphics)
     int newWidth = static_cast<int>(mImage.GetWidth() * scaleFactor);
     int newHeight = static_cast<int>(mImage.GetHeight() * scaleFactor);
 
+    // Calculate the X position for the first image to center it
+    int image1X = (halfWidth - newWidth) / 2;
+
     // Rescale the image with a specific quality option (you can choose the one you prefer)
     wxImage scaledImage = mImage.Rescale(newWidth, newHeight, wxIMAGE_QUALITY_HIGH);
 
     // Create a bitmap from the scaled image
     auto bitmap = graphics->CreateBitmapFromImage(scaledImage);
-    graphics->DrawBitmap(bitmap, 0, 0, newWidth, newHeight);
+    graphics->DrawBitmap(bitmap, image1X, 0, newWidth, newHeight);
+
+    graphics->DrawBitmap(mImageDetected, image1X+halfWidth, 0, newWidth, newHeight);
 
 }
 
@@ -67,7 +70,6 @@ void Image::SetImage(const wxString& imagePath)
 {
     // Load the image using the provided path
     mImage = LoadImage(imagePath);
-
     DetectFaces();
 }
 
@@ -86,7 +88,7 @@ void Image::DetectFaces()
     // Initialize face detection classifier
     cv::CascadeClassifier face_cascade;
     // Load pre-trained XML classifier for face detection
-    if (!face_cascade.load("C:/Program Files/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml")) {
+    if (!face_cascade.load(faceCascadePath)) {
         std::cerr << "Error loading face cascade." << std::endl;
         return ;
     }
@@ -105,8 +107,15 @@ void Image::DetectFaces()
         // Crop the detected face region
         cv::Mat face = image(faces[i]);
         mFaceRecognition->AddDetectedFace(face);
-
     }
+
+    // Loop through the detected faces and draw bounding boxes
+    for (const cv::Rect& face : faces) {
+        cv::rectangle(image, face, cv::Scalar(0, 0, 255), 3);  // Draw a red rectangle around the face
+    }
+
+    mImageDetected = wxBitmap(image.cols, image.rows, 24);
+    ConvertMatBitmapTowxBitmap(image, mImageDetected);
 }
 
 

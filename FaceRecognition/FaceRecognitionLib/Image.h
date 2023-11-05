@@ -8,7 +8,10 @@ class Image: public Item
 {
 
 private:
+	//original image
 	wxImage mImage;
+	//image with the detected faces highlighted
+	wxBitmap mImageDetected;
 	wxImage LoadImage(const wxString& imagePath);
 public:
 
