@@ -24,7 +24,7 @@ void MainFrame::InitializeLoadingPanel() {
 
 	// Configure a timer to close the loading screen after a certain time
 	wxTimer* loadingTimer = new wxTimer(this, 1);
-	loadingTimer->StartOnce(5000);  // Show loading screen for 3 seconds
+	loadingTimer->StartOnce(3400);  // Show loading screen for 3 seconds
 	Bind(wxEVT_TIMER, &MainFrame::OnLoadingTimer, this);
 	
 }
