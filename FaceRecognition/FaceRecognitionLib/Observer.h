@@ -17,7 +17,8 @@ protected:
     Observer() {}
     /// Picture we are observing
     std::shared_ptr<FaceRecognition> mFaceRecognition;
-    std::vector<cv::Mat> mDetectedFaces;
+
+
 public:
     /// Copy constructor (disabled)
     Observer(const Observer&) = delete;
@@ -47,8 +48,4 @@ public:
      */
      std::shared_ptr<FaceRecognition> GetFaceRecognition() { return mFaceRecognition; }
 
-     /**
-      * Add the face that has been detected
-     */
-     virtual void AddDetectedFace(cv::Mat faceImage){}
 };

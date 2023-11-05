@@ -35,10 +35,10 @@ void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 	{
 		return;
 	}
-
 	auto filename = loadFileDialog.GetPath();
+	mFaceRecognition->ClearDetectedFaces();
 	mFaceRecognition->Load(filename);
-	UpdateObserver();
+	mFaceRecognition->UpdateObservers();
 }
 
 void FaceRecognitionView::OnFileSaveAs(wxCommandEvent& event)
@@ -54,7 +54,8 @@ void FaceRecognitionView::OnPaint(wxPaintEvent& event)
 	wxAutoBufferedPaintDC dc(this);
 	DoPrepareDC(dc);
 
-	wxBrush background(*wxWHITE);
+	// Clear the image to black
+	wxBrush background(*wxBLACK);
 	dc.SetBackground(background);
 	dc.Clear();
 

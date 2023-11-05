@@ -22,10 +22,4 @@ public:
 
 	virtual void OnFileOpen(wxCommandEvent& event) override;
 	virtual void OnFileSaveAs(wxCommandEvent& event) override;
-
-
-	/**
-	 * Add the face that has been detected
-	*/
-	virtual void AddDetectedFace(std::shared_ptr<wxImage> faceImage) {}
 };
