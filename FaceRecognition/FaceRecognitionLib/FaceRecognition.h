@@ -14,6 +14,7 @@ private:
 	/// The observers of this picture
 	std::vector<Observer*> mObservers;
 
+	std::vector<wxBitmap> mDetectedFaces;
 
 public:
 	void OnDraw(std::shared_ptr<wxGraphicsContext> graphics);
@@ -24,5 +25,16 @@ public:
 	void AddObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);
 	void UpdateObservers();
-	void AddDetectedFaces(cv::Mat faceImage);
+	/**
+   * Add the face that has been detected
+  */
+	virtual void AddDetectedFace(cv::Mat faceImage);
+
+	/**
+	* Clear the vector
+	*/
+	virtual void ClearDetectedFaces();
+	std::vector<wxBitmap> GetDetectedFaces();
+
+	int GetNumofDetectedFaces() { return mDetectedFaces.size(); }
 };

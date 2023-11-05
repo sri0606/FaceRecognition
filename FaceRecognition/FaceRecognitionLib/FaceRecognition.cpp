@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "Image.h"
 #include "Observer.h"
+#include "convertmattowxbmp.h"
 
 using namespace std;
 
@@ -53,7 +54,6 @@ void FaceRecognition::Load(const wxString& filename)
 {
 	mItem = std::make_unique<Image>(filename,this);
     UpdateObservers();
-    
 }
 
 void FaceRecognition::Clear()
@@ -94,12 +94,21 @@ void FaceRecognition::UpdateObservers()
 	}
 }
 
-/**
-*   Add the faces taht are detected to observer
-*/
-void FaceRecognition::AddDetectedFaces(cv::Mat faceImage)
+void FaceRecognition::AddDetectedFace(cv::Mat faceImage)
 {
-    for (auto observer : mObservers) {
-        observer->AddDetectedFace(faceImage);
-    }
+    wxBitmap faceBitmap(faceImage.cols, faceImage.rows, 24);
+    ConvertMatBitmapTowxBitmap(faceImage, faceBitmap);
+    mDetectedFaces.push_back(faceBitmap);
+    UpdateObservers();
+}
+
+void FaceRecognition::ClearDetectedFaces()
+{
+    mDetectedFaces.clear();
+    UpdateObservers();
+}
+
+std::vector<wxBitmap> FaceRecognition::GetDetectedFaces() {
+
+    return mDetectedFaces;
 }
