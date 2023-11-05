@@ -2,7 +2,7 @@
 #include <wx/dcbuffer.h>
 #include <wx/graphics.h>
 #include "FaceDetectionView.h"
-#include "convertmattowxbmp.h"
+
 
 /**
  * Constructor
@@ -22,7 +22,7 @@ FaceDetectionView::FaceDetectionView(wxFrame* parent) :
     //Bind(wxEVT_LEFT_DOWN, &FaceDetectionView::OnLeftDown, this);
     //Bind(wxEVT_LEFT_UP, &FaceDetectionView::OnLeftUp, this);
     //Bind(wxEVT_MOTION, &FaceDetectionView::OnMouseMove, this);
-
+   
 }
 
 /**
@@ -31,7 +31,7 @@ FaceDetectionView::FaceDetectionView(wxFrame* parent) :
 void FaceDetectionView::UpdateObserver()
 {
     Refresh();
-    //Update();
+    Update();
 }
 
 
@@ -41,17 +41,12 @@ void FaceDetectionView::UpdateObserver()
 */
 void FaceDetectionView::OnFileOpen(wxCommandEvent& event)
 {
-    /*mDetectedFaces.clear();*/
+    
     UpdateObserver();
 }
 
 void FaceDetectionView::OnFileSaveAs(wxCommandEvent& event)
 {
-}
-
-void FaceDetectionView::AddDetectedFace(cv::Mat faceImage)
-{
-    mDetectedFaces.push_back(faceImage);
 }
 
 
@@ -61,11 +56,10 @@ void FaceDetectionView::AddDetectedFace(cv::Mat faceImage)
  */
 void FaceDetectionView::OnPaint(wxPaintEvent& event)
 {
-    SetVirtualSize(10, 0);
-    SetScrollRate(1, 0);
     wxAutoBufferedPaintDC dc(this);
     DoPrepareDC(dc);
 
+ 
     wxBrush background(*wxWHITE);
     dc.SetBackground(background);
     dc.Clear();
@@ -75,30 +69,53 @@ void FaceDetectionView::OnPaint(wxPaintEvent& event)
     // Get the dimensions of the graphics context
     double contextWidth, contextHeight;
     graphics->GetSize(&contextWidth, &contextHeight);
+    
+    int minImageWidth = 250;
+    int minImageHeight = 275;
+
+    auto pair = GetNumofRowsCols(contextWidth, contextHeight);
+
+    int rows = pair.first;
+    int cols = pair.second;
+
+    SetVirtualSize(1.5*contextWidth, rows*(contextHeight+5));
+    SetScrollRate(10, 10);
 
     double x = 10;
     double y = 10;
+    int i = 1;
+    auto detectedFaces = mFaceRecognition->GetDetectedFaces();
+    for (auto &face : detectedFaces) {
 
-    double scaleX, scaleY, scaleFactor = 0;
-    int newWidth, newHeight;
+        graphics->DrawBitmap(face, x, y, minImageWidth, minImageHeight);
 
-    for (auto &face : mDetectedFaces) {
-        
-        //Calculate the scaling factors to fit the image within the context while maintaining aspect ratio
-        scaleX = contextWidth / face.cols;
-        scaleY = contextHeight / face.rows;
-        scaleFactor = std::min(scaleX, scaleY);
-
-        // Calculate the new dimensions
-        newWidth = static_cast<int>(face.cols * scaleFactor);
-        newHeight = static_cast<int>(face.rows * scaleFactor);
-
-        wxBitmap bitmap(face.cols,face.rows,24);
-        ConvertMatBitmapTowxBitmap(face,bitmap);
-        graphics->DrawBitmap(bitmap, x, y, newWidth, newHeight);
-
-        // Update the position for the next image
-        x += newWidth + 5; // Add some spacing between images
+        if (i < cols) {
+            // Update the position for the next image
+            x += minImageWidth + 5;
+            i++;
+        }
+        else {
+            x = 10;
+            y = minImageHeight+5;
+            i = 0;
+        }   
     }
-    mDetectedFaces.clear();
+}
+
+std::pair<int,int> FaceDetectionView::GetNumofRowsCols(int contextWidth, int contextHeight) {
+    int minImageWidth = 250;
+    int minImageHeight = 275;
+    int maxImageWidth = contextWidth;
+    int maxImageHeight = contextHeight;
+    int numFaces = mFaceRecognition->GetNumofDetectedFaces();
+
+    int rows=1;
+    int columns = 8;
+
+    int maxScrollLengthHorizontal = 1.5*contextWidth;
+    // 8 * 50 > 300
+    if (numFaces * minImageWidth > maxScrollLengthHorizontal) {
+        rows = static_cast<int>(numFaces * minImageWidth / maxScrollLengthHorizontal);
+    }
+    return std::pair<int,int>(rows, columns);
 }

@@ -104,7 +104,7 @@ void Image::DetectFaces()
     for (size_t i = 0; i < faces.size(); i++) {
         // Crop the detected face region
         cv::Mat face = image(faces[i]);
-        mFaceRecognition->AddDetectedFaces(face);
+        mFaceRecognition->AddDetectedFace(face);
 
     }
 }

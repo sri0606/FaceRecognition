@@ -9,6 +9,8 @@ private:
 
      virtual void OnPaint(wxPaintEvent& event) override;
 
+     std::pair<int, int> GetNumofRowsCols(int contextWidth, int contextHeight);
+
     
 
 public:
@@ -18,11 +20,6 @@ public:
     FaceDetectionView(wxFrame* parent);
 
     void UpdateObserver() override;
-
-    /**
-      * Add the face that has been detected
-     */
-    virtual void AddDetectedFace(cv::Mat faceImage) override;
 
     virtual void OnFileOpen(wxCommandEvent& event) override;
     virtual void OnFileSaveAs(wxCommandEvent& event) override;
