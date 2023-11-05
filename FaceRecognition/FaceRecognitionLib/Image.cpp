@@ -47,18 +47,26 @@ void Image::Draw(std::shared_ptr<wxGraphicsContext> graphics)
     double scaleY = contextHeight / mImage.GetHeight();
     double scaleFactor = std::min(scaleX, scaleY);
 
+    int newWidth, newHeight;
     // Calculate the new dimensions
-    int newWidth = static_cast<int>(mImage.GetWidth() * scaleFactor);
-    int newHeight = static_cast<int>(mImage.GetHeight() * scaleFactor);
+    if (scaleFactor == 0) {
+        //if the the image dimension are very large extending the window size
+        newWidth = halfWidth * 0.98;
+        newHeight = contextHeight;
+    }
+    else {
+        newWidth = static_cast<int>(mImage.GetWidth() * scaleFactor);
+        newHeight = static_cast<int>(mImage.GetHeight() * scaleFactor);
+    }
 
     // Calculate the X position for the first image to center it
     int image1X = (halfWidth - newWidth) / 2;
 
     // Rescale the image with a specific quality option (you can choose the one you prefer)
-    wxImage scaledImage = mImage.Rescale(newWidth, newHeight, wxIMAGE_QUALITY_HIGH);
+    //wxImage scaledImage = mImage.Rescale(newWidth, newHeight, wxIMAGE_QUALITY_HIGH);
 
     // Create a bitmap from the scaled image
-    auto bitmap = graphics->CreateBitmapFromImage(scaledImage);
+    auto bitmap = graphics->CreateBitmapFromImage(mImage);
     graphics->DrawBitmap(bitmap, image1X, 0, newWidth, newHeight);
 
     graphics->DrawBitmap(mImageDetected, image1X+halfWidth, 0, newWidth, newHeight);
