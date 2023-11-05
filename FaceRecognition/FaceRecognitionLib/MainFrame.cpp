@@ -1,39 +1,42 @@
-
 #include "pch.h"
 #include "MainFrame.h"
-#include "FaceRecognitionView.h"
-#include "FaceDetectionView.h"
 #include "ids.h"
-#include "FaceRecognition.h"
+#include "LoadingPanel.h"
+#include "MainPanel.h"
+
+
 /**
  * Initialize the MainFrame window.
  */
 void MainFrame::Initialize()
 {
-	Create(nullptr, wxID_ANY, L"Face Recognition", wxDefaultPosition, wxSize(1000, 800));
+	wxSize screenSize = wxGetDisplaySize();
+	Create(nullptr, wxID_ANY, L"FaceSpyder", wxDefaultPosition, screenSize);
+
+	// Initialize and show the loading panel
+	InitializeLoadingPanel();
+}
+
+void MainFrame::InitializeLoadingPanel() {
+
+	// Create panels for different screens
+	mLoadingPanel = new LoadingPanel(this);
+
+	// Configure a timer to close the loading screen after a certain time
+	wxTimer* loadingTimer = new wxTimer(this, 1);
+	loadingTimer->StartOnce(5000);  // Show loading screen for 3 seconds
+	Bind(wxEVT_TIMER, &MainFrame::OnLoadingTimer, this);
+	
+}
+
+void MainFrame::OnLoadingTimer(wxTimerEvent& event) {
+	// Hide loading panel and show the main application panel
+	mLoadingPanel->Hide();
+	mMainPanel = new MainPanel(this);
+	mMainPanel->Show();
+
 	Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnExit, this, wxID_EXIT);
 	Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);
-	// Create a sizer that will lay out child windows vertically
-	// one above each other
-	auto sizer = new wxBoxSizer(wxVERTICAL);
-
-	// Create the view class object as a child of MainFrame
-	mFaceRecognitionView = new FaceRecognitionView(this);
-	mFaceDetectionView = new FaceDetectionView(this);
-
-	sizer->Add(mFaceRecognitionView, 3, wxEXPAND | wxALL);
-	sizer->Add(mFaceDetectionView, 2, wxEXPAND | wxALL);
-
-	auto faceRecognition = std::make_shared<FaceRecognition>();
-
-	mFaceDetectionView->SetFaceRecognition(faceRecognition);
-	mFaceRecognitionView->SetFaceRecognition(faceRecognition);
-
-	// Set the sizer for this frame
-	SetSizer(sizer);
-
-	// Layout (place) the child windows.
-	Layout();
 
 	auto menuBar = new wxMenuBar();
 
@@ -53,6 +56,7 @@ void MainFrame::Initialize()
 	CreateStatusBar(1, wxSTB_SIZEGRIP, wxID_ANY);
 }
 
+
 /**
  * Exit menu option handlers
  * @param event
@@ -68,7 +72,9 @@ void MainFrame::OnExit(wxCommandEvent& event)
  */
 void MainFrame::OnAbout(wxCommandEvent& event)
 {
-	wxMessageBox(L"Welcome to the Face REcognition!. Created by Sriram Seelamneni",
+	wxMessageBox(L"\tWelcome to the FaceSpyder!\n\n \
+		\t\tCreated by Sriram Seelamneni \n\n \
+		The Face Recognition and Privacy Analysis Tool is a software application developed with the primary goal of providing advanced face and object recognition capabilities.While its current focus is on recognizing faces and objects in various media elements, including images, videos, and documents, its long - term vision includes becoming a powerful privacy analysis tool.The inspiration for this tool is the growing concern regarding data privacy and the potential misuse of facial recognition technology.",
 		L"About Face Recognition",
 		wxOK,
 		this);
