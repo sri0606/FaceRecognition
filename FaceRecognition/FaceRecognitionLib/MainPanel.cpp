@@ -6,7 +6,9 @@
 #include "ids.h"
 #include "FaceRecognition.h"
 
-MainPanel::MainPanel(wxFrame* parent):wxPanel(parent, wxID_ANY, wxDefaultPosition, parent->GetSize())
+MainPanel::MainPanel(wxFrame* parent):
+	wxPanel(parent, wxID_ANY, wxDefaultPosition, 
+		wxSize(parent->GetSize().x,800))
 {
 	// Create a sizer that will lay out child windows vertically
 	// one above each other
