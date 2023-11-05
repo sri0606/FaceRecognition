@@ -1,5 +1,9 @@
 #include "pch.h"
 #include "LoadingPanel.h"
+#include <wx\graphics.h>
+#include <wx/dcbuffer.h>
+
+const std::wstring loadImagePath = L"images/load.png";
 
 LoadingPanel::LoadingPanel(wxFrame* parent):wxPanel(parent, wxID_ANY, wxDefaultPosition, parent->GetSize())
 {
@@ -10,16 +14,24 @@ LoadingPanel::LoadingPanel(wxFrame* parent):wxPanel(parent, wxID_ANY, wxDefaultP
 
 void LoadingPanel::OnPaint(wxPaintEvent& event)
 {
-    wxPaintDC dc(this);
+    wxBufferedPaintDC dc(this);
 
-    // Set the background color
-    dc.SetBackground(*wxBLUE_BRUSH); // Replace wxBLUE_BRUSH with your desired color
+    const wxSize& size = GetClientSize();
+    wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
 
-    // Clear the background with the chosen color
-    dc.Clear();
+    // clear background of the window with black
+    gc->SetBrush(*wxBLACK_BRUSH);
 
-    // Draw a red rectangle (you can replace this with your custom graphics)
-    dc.SetBrush(*wxRED_BRUSH);
-    dc.SetPen(*wxTRANSPARENT_PEN); // No outline
-    dc.DrawRectangle(50, 50, 100, 100);
+    wxImage image(loadImagePath, wxBITMAP_TYPE_PNG);
+
+    int centerX = (size.x - image.GetWidth()) / 2;
+    int centerY = (size.y - image.GetHeight()) / 2;
+
+    // Create a bitmap from the loaded image
+    wxBitmap bitmap(image);
+
+    // Paint the image at the calculated position
+    gc->DrawBitmap(bitmap, centerX, centerY,image.GetWidth(),image.GetHeight());
+    
 }
+
