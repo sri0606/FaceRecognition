@@ -21,8 +21,8 @@ void MainFrame::Initialize()
 	mFaceRecognitionView = new FaceRecognitionView(this);
 	mFaceDetectionView = new FaceDetectionView(this);
 
-	sizer->Add(mFaceRecognitionView, 1, wxEXPAND | wxALL);
-	sizer->Add(mFaceDetectionView, 1, wxEXPAND | wxALL);
+	sizer->Add(mFaceRecognitionView, 3, wxEXPAND | wxALL);
+	sizer->Add(mFaceDetectionView, 2, wxEXPAND | wxALL);
 
 	auto faceRecognition = std::make_shared<FaceRecognition>();
 
@@ -68,7 +68,7 @@ void MainFrame::OnExit(wxCommandEvent& event)
  */
 void MainFrame::OnAbout(wxCommandEvent& event)
 {
-	wxMessageBox(L"Welcome to the Face REcognition!",
+	wxMessageBox(L"Welcome to the Face REcognition!. Created by Sriram Seelamneni",
 		L"About Face Recognition",
 		wxOK,
 		this);
