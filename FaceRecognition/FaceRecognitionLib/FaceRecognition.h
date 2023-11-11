@@ -1,9 +1,12 @@
 #pragma once
 
-# include <iostream>
 #include "Item.h"
 class Observer;
+class FaceRecognitionView;
 
+/**
+** 
+*/
 class FaceRecognition
 {	
 private:
@@ -20,7 +23,7 @@ public:
 	void OnDraw(std::shared_ptr<wxGraphicsContext> graphics);
 	FaceRecognition();
 	void Save(const wxString& filename);
-	void Load(const wxString& filename);
+	void Load(FaceRecognitionView* parent,const wxString& filename);
 	void Clear();
 	void AddObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);

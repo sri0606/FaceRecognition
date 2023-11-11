@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "Image.h"
 #include "Observer.h"
+#include "FaceRecognitionView.h"
 #include "convertmattowxbmp.h"
 
 using namespace std;
@@ -50,9 +51,9 @@ void FaceRecognition::Save(const wxString& filename)
 {
 }
 
-void FaceRecognition::Load(const wxString& filename)
+void FaceRecognition::Load(FaceRecognitionView* parent,const wxString& filename)
 {
-	mItem = std::make_unique<Image>(filename,this);
+	mItem = std::make_unique<Image>(filename,parent,this);
     UpdateObservers();
 }
 
