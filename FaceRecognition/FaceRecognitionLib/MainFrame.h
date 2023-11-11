@@ -9,6 +9,7 @@ private:
 	wxPanel* mLoadingPanel;
 	wxPanel* mMainPanel;
 
+
 public:
 	void Initialize();
 

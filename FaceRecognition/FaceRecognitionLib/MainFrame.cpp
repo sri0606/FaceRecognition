@@ -5,6 +5,7 @@
 #include "MainPanel.h"
 
 
+
 /**
  * Initialize the MainFrame window.
  */
@@ -12,6 +13,7 @@ void MainFrame::Initialize()
 {
 	wxSize screenSize = wxGetDisplaySize();
 	Create(nullptr, wxID_ANY, L"FaceSpyder", wxDefaultPosition, screenSize);
+
 
 	// Initialize and show the loading panel
 	InitializeLoadingPanel();
@@ -21,6 +23,8 @@ void MainFrame::InitializeLoadingPanel() {
 
 	// Create panels for different screens
 	mLoadingPanel = new LoadingPanel(this);
+
+
 
 	// Configure a timer to close the loading screen after a certain time
 	wxTimer* loadingTimer = new wxTimer(this, 1);
@@ -39,12 +43,12 @@ void MainFrame::OnLoadingTimer(wxTimerEvent& event) {
 	Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);
 
 	auto menuBar = new wxMenuBar();
-
+	menuBar->SetBackgroundColour(wxColor(240, 24, 240));
 	auto fileMenu = new wxMenu();
 	auto helpMenu = new wxMenu();
 
 	fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit this program");
-	fileMenu->Append(wxID_SAVEAS, "Save &As...\tCtrl-S", L"Save as...");
+	//fileMenu->Append(wxID_SAVEAS, "Save &As...\tCtrl-S", L"Save as...");
 	fileMenu->Append(wxID_OPEN, "Open &File...\tCtrl-F", L"Open file...");
 
 	helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
