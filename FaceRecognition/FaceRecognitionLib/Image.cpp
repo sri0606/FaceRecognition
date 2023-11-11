@@ -1,19 +1,19 @@
-
 #include "pch.h"
 #include "Image.h"
 #include <wx/splitter.h>
 #include <wx/graphics.h>
-#include "Item.h"
+#include <opencv2/opencv.hpp>
 #include "FaceRecognition.h"
 #include "convertmattowxbmp.h"
+#include "FaceRecognitionView.h"
 using namespace cv;
 
-std::string faceCascadePath = "C:/Program Files/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml";
+const std::string faceCascadePath = "C:/Program Files/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml";
 
 /**
  * Image Constructor
  */
-Image::Image(const wxString& filename, FaceRecognition* facrec):Item(filename, facrec)
+Image::Image(const wxString& filename, FaceRecognitionView* parent, FaceRecognition* facrec):Item(filename,parent, facrec)
 {
     this->SetImage(filename);
    
