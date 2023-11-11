@@ -4,6 +4,11 @@
 #include "FaceRecognition.h"
 
 
+Observer::Observer(wxPanel* parent)
+{
+    mParentPanel = parent;
+}
+
 /** Destructor */
 Observer::~Observer()
 {

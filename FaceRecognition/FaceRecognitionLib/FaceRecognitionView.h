@@ -3,7 +3,7 @@
 #include "Observer.h"
 
 /**
- * Class that defines our Aquarium view
+ * Class that defines our FaceRecognitionView view
  */
 class FaceRecognitionView final : public wxScrolledCanvas, public Observer
 {

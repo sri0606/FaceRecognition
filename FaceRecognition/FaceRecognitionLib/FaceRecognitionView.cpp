@@ -4,8 +4,9 @@
 #include <wx/dcbuffer.h>
 #include <wx/graphics.h>
 #include "FaceRecognition.h"
+#include "Observer.h"
 
-FaceRecognitionView::FaceRecognitionView(wxPanel* parent) :
+FaceRecognitionView::FaceRecognitionView(wxPanel* parent) : Observer(parent),
 	wxScrolledCanvas(parent,
 		wxID_ANY)
 {
@@ -37,7 +38,7 @@ void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 	}
 	auto filename = loadFileDialog.GetPath();
 	mFaceRecognition->ClearDetectedFaces();
-	mFaceRecognition->Load(filename);
+	mFaceRecognition->Load(this,filename);
 	mFaceRecognition->UpdateObservers();
 }
 

@@ -2,14 +2,14 @@
 #include <wx/dcbuffer.h>
 #include <wx/graphics.h>
 #include "FaceDetectionView.h"
-
+#include "Observer.h"
 
 /**
  * Constructor
  * @param parent The main wxFrame object
  * 
  */
-FaceDetectionView::FaceDetectionView(wxPanel* parent) :
+FaceDetectionView::FaceDetectionView(wxPanel* parent) : Observer(parent),
     wxScrolledCanvas(parent,
         wxID_ANY,
         wxDefaultPosition,

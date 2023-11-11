@@ -11,10 +11,9 @@
 class Observer {
 private:
   
-
+    wxPanel* mParentPanel;
 protected:
-    /// Constructor (protected)
-    Observer() {}
+    
     /// Picture we are observing
     std::shared_ptr<FaceRecognition> mFaceRecognition;
 
@@ -24,7 +23,8 @@ public:
     Observer(const Observer&) = delete;
 
     ~Observer();
-
+    /// Constructor (protected)
+    Observer(wxPanel* parent);
     /// Assignment operator
     void operator=(const Observer&) = delete;
 
@@ -47,5 +47,11 @@ public:
      * @return Pointer to picture we are observing
      */
      std::shared_ptr<FaceRecognition> GetFaceRecognition() { return mFaceRecognition; }
+
+     /**
+     * Get the panel the views being painted on
+     * @return Pointer to panel
+     */
+     wxPanel* GetParentPanel() { return mParentPanel; }
 
 };
