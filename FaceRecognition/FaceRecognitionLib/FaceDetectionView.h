@@ -21,6 +21,7 @@ public:
 
     void UpdateObserver() override;
 
-    virtual void OnFileOpen(wxCommandEvent& event) override;
+    virtual void OnImageOpen(wxCommandEvent& event) override;
+    virtual void OnVideoOpen(wxCommandEvent& event) override;
     virtual void OnFileSaveAs(wxCommandEvent& event) override;
 };

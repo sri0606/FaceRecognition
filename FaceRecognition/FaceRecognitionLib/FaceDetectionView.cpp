@@ -36,12 +36,20 @@ void FaceDetectionView::UpdateObserver()
 
 
 /**
-* File>Open menu handler
+* File>Open Image handler
  * @param event Menu event
 */
-void FaceDetectionView::OnFileOpen(wxCommandEvent& event)
+void FaceDetectionView::OnImageOpen(wxCommandEvent& event)
 {
-    
+    UpdateObserver();
+}
+
+/**
+* File>Open Video handler
+ * @param event Menu event
+*/
+void FaceDetectionView::OnVideoOpen(wxCommandEvent& event)
+{
     UpdateObserver();
 }
 

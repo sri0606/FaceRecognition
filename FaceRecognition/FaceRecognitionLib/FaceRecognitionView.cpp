@@ -5,17 +5,19 @@
 #include <wx/graphics.h>
 #include "FaceRecognition.h"
 #include "Observer.h"
+#include "ids.h"
 
 FaceRecognitionView::FaceRecognitionView(wxPanel* parent) : Observer(parent),
 	wxScrolledCanvas(parent,
 		wxID_ANY)
 {
 	
-	SetBackgroundStyle(wxBG_STYLE_PAINT);
+	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 	Bind(wxEVT_PAINT, &FaceRecognitionView::OnPaint, this);
 
 	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileSaveAs, this, wxID_SAVEAS);
-	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileOpen, this, wxID_OPEN);
+	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnImageOpen, this, IDM_OPENIMAGE);
+	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnVideoOpen, this, IDM_OPENVIDEO);
 }
 
 void FaceRecognitionView::UpdateObserver()
@@ -27,7 +29,7 @@ void FaceRecognitionView::UpdateObserver()
 * File>Open menu handler
  * @param event Menu event
 */
-void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
+void FaceRecognitionView::OnImageOpen(wxCommandEvent& event)
 {
 	wxFileDialog loadFileDialog(this, L"Load Image", L"", L"",
 		L"Image Files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.ico|All Files|*.*", wxFD_OPEN);
@@ -38,9 +40,25 @@ void FaceRecognitionView::OnFileOpen(wxCommandEvent& event)
 	}
 	auto filename = loadFileDialog.GetPath();
 	mFaceRecognition->ClearDetectedFaces();
-	mFaceRecognition->Load(this,filename);
+	mFaceRecognition->LoadImage(this,filename);
 	mFaceRecognition->UpdateObservers();
 }
+
+void FaceRecognitionView::OnVideoOpen(wxCommandEvent& event)
+{
+	wxFileDialog loadFileDialog(this, L"Load Video", L"", L"",
+		L"Video Files|*.mp4;*.avi;*.mkv;*.mov;*.wmv;*.flv|All Files|*.*", wxFD_OPEN);
+
+	if (loadFileDialog.ShowModal() == wxID_CANCEL)
+	{
+		return;
+	}
+	auto filename = loadFileDialog.GetPath();
+	mFaceRecognition->ClearDetectedFaces();
+	mFaceRecognition->LoadVideo(this, filename);
+	mFaceRecognition->UpdateObservers();
+}
+
 
 void FaceRecognitionView::OnFileSaveAs(wxCommandEvent& event)
 {
