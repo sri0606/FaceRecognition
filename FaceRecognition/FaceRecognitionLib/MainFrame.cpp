@@ -45,15 +45,24 @@ void MainFrame::OnLoadingTimer(wxTimerEvent& event) {
 	auto menuBar = new wxMenuBar();
 	menuBar->SetBackgroundColour(wxColor(240, 24, 240));
 	auto fileMenu = new wxMenu();
+	auto imageMenu = new wxMenu();
+	auto videoMenu = new wxMenu();
 	auto helpMenu = new wxMenu();
 
 	fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit this program");
-	//fileMenu->Append(wxID_SAVEAS, "Save &As...\tCtrl-S", L"Save as...");
-	fileMenu->Append(wxID_OPEN, "Open &File...\tCtrl-F", L"Open file...");
+	fileMenu->Append(wxID_SAVEAS, "Save &Detected &Faces...\tCtrl-S", L"Save detected faces...");
+
+	imageMenu->Append(IDM_OPENIMAGE, "Open &Image...\tCtrl-I", L"Open image...");
+
+	videoMenu->Append(IDM_OPENVIDEO, "Open &Video...\tCtrl-V", L"Open Video...");
+	videoMenu->Append(IDM_OPENCAMERA, "Open &Camera...\tCtrl-C", L"Open Camera...");
+	videoMenu->Append(IDM_OPENSTREAM, "Open &Stream...\tCtrl-S", L"Open Stream...");
 
 	helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
 	menuBar->Append(fileMenu, "&File");
+	menuBar->Append(imageMenu, "&Image");
+	menuBar->Append(videoMenu, "&Video");
 	menuBar->Append(helpMenu, "&Help");
 
 	SetMenuBar(menuBar);
