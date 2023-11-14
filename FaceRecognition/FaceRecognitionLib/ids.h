@@ -1,6 +1,9 @@
 
 #pragma once
 
-enum ids {
-
+enum IDs {
+	IDM_OPENIMAGE = wxID_HIGHEST + 1,
+	IDM_OPENVIDEO, //=wxID_HIGHEST + 2,
+	IDM_OPENCAMERA,//= wxID_HIGHEST + 3,
+	IDM_OPENSTREAM,
 };
