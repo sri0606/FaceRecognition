@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(FaceRecognition)
 set(APPLICATION_LIBRARY FaceRecognitionLib)
-
+set(IMAGE_RESOURCES_LIBRARY ImageresourcesLib)
 set(CMAKE_CXX_STANDARD 17)
 
 # Request the required wxWidgets libs
@@ -36,3 +36,4 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/images/
        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/images/)
 add_subdirectory(Tests)
+add_subdirectory(${IMAGE_RESOURCES_LIBRARY})
