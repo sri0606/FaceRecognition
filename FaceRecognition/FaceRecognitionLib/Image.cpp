@@ -4,7 +4,7 @@
 #include <wx/graphics.h>
 #include <opencv2/opencv.hpp>
 #include "FaceRecognition.h"
-#include "convertmattowxbmp.h"
+#include "../ImageResourcesLib/convertmattowxbmp.h"
 #include "FaceRecognitionView.h"
 using namespace cv;
 
@@ -15,8 +15,7 @@ const std::string faceCascadePath = "C:/Program Files/opencv/sources/data/haarca
  */
 Image::Image(const wxString& filename, FaceRecognitionView* parent, FaceRecognition* facrec):Item(filename,parent, facrec)
 {
-    this->SetImage(filename);
-   
+ 
 }
 
 /**
@@ -24,12 +23,14 @@ Image::Image(const wxString& filename, FaceRecognitionView* parent, FaceRecognit
 */
 void Image::Process()
 {
-    cv::Mat originalImage = cv::imread(mPath.ToStdString());
+    // Load the image from the provided path
+     mImage = wxImage(mPath, wxBITMAP_TYPE_ANY);
 
-    if (originalImage.empty()) {
-        wxLogError("Failed to load the image from path: %s", mPath);
-        return;
+    if (!mImage.IsOk()) {
+        // Handle image loading error
+        wxLogError("Failed to load image: %s", mPath);
     }
+    DetectFaces();
 }
 
 
@@ -41,6 +42,7 @@ void Image::Draw(std::shared_ptr<wxGraphicsContext> graphics)
 
     // half-width of window
     int halfWidth = static_cast<int>(contextWidth / 2.0);
+    int halfHeight = static_cast<int>(contextHeight / 2.0);
 
     // Calculate the scaling factors to fit the image within the context while maintaining aspect ratio
     double scaleX = halfWidth / mImage.GetWidth();
@@ -59,27 +61,21 @@ void Image::Draw(std::shared_ptr<wxGraphicsContext> graphics)
         newHeight = static_cast<int>(mImage.GetHeight() * scaleFactor);
     }
 
-    // Calculate the X position for the first image to center it
+    // Calculate the X,Y position for the first image to center it
     int image1X = (halfWidth - newWidth) / 2;
+    int image1Y = (halfHeight - newHeight) ;
 
     // Rescale the image with a specific quality option (you can choose the one you prefer)
     //wxImage scaledImage = mImage.Rescale(newWidth, newHeight, wxIMAGE_QUALITY_HIGH);
 
     // Create a bitmap from the scaled image
     auto bitmap = graphics->CreateBitmapFromImage(mImage);
-    graphics->DrawBitmap(bitmap, image1X, 0, newWidth, newHeight);
+    graphics->DrawBitmap(bitmap, image1X, image1Y, newWidth, newHeight);
 
-    graphics->DrawBitmap(mImageDetected, image1X+halfWidth, 0, newWidth, newHeight);
+    graphics->DrawBitmap(mImageDetected, image1X+halfWidth, image1Y, newWidth, newHeight);
 
 }
 
-
-void Image::SetImage(const wxString& imagePath)
-{
-    // Load the image using the provided path
-    mImage = LoadImage(imagePath);
-    DetectFaces();
-}
 
 /**
 *   Detect the faces in the image
@@ -124,18 +120,4 @@ void Image::DetectFaces()
 
     mImageDetected = wxBitmap(image.cols, image.rows, 24);
     ConvertMatBitmapTowxBitmap(image, mImageDetected);
-}
-
-
-wxImage Image::LoadImage(const wxString& imagePath)
-{
-    // Load the image from the provided path
-    wxImage img(imagePath, wxBITMAP_TYPE_ANY);
-
-    if (!img.IsOk()) {
-        // Handle image loading error
-        wxLogError("Failed to load image: %s", imagePath);
-    }
-
-    return img;
 }
