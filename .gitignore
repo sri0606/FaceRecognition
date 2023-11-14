@@ -47,3 +47,6 @@ __MACOSX
 out*
 CMakeFiles*
 *.cmake
+
+# sub directories
+ImageResourceLib/
