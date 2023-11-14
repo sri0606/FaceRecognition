@@ -1,24 +1,27 @@
 #pragma once
 
-#include "Item.h"
+#include <wx/bitmap.h>
 #include <wx/mediactrl.h>
+#include "Item.h"
+
+
 /**
 
 */
 class Video : public Item
 {
 private:
-	//original video
-	wxMediaCtrl* mVideo;
 	//image with the detected faces highlighted
-	//wxBitmap mImageDetected;
+	wxBitmap mCurrentVideoFrame;
+
+	cv::Mat mCurrentMatframe;
+	//wxTimer mTimer;
 	
 public:
 
 	Video(const wxString& filename, FaceRecognitionView* parent, FaceRecognition* facrec);
 	virtual void Process() override;
 	virtual void Draw(std::shared_ptr<wxGraphicsContext> graphics) override;
-	void SetVideo(const wxString& VideoPath);
-	wxMediaCtrl* LoadVideo(const wxString& VideoPath);
 	virtual void DetectFaces() override;
+	void SetCurrentFrame();// wxTimerEvent& event);
 };
