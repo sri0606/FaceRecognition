@@ -4,11 +4,11 @@
 #include <wx/splitter.h>
 #include <wx/dcbuffer.h>
 #include <wx/graphics.h>
-#include "Item.h"
 #include "Image.h"
+#include "Video.h"
 #include "Observer.h"
 #include "FaceRecognitionView.h"
-#include "convertmattowxbmp.h"
+#include "../ImageResourcesLib/convertmattowxbmp.h"
 
 using namespace std;
 
@@ -51,10 +51,16 @@ void FaceRecognition::Save(const wxString& filename)
 {
 }
 
-void FaceRecognition::Load(FaceRecognitionView* parent,const wxString& filename)
+void FaceRecognition::LoadImage(FaceRecognitionView* parent,const wxString& filename)
 {
 	mItem = std::make_unique<Image>(filename,parent,this);
-    UpdateObservers();
+    mItem->Process();
+}
+
+void FaceRecognition::LoadVideo(FaceRecognitionView* parent, const wxString& filename)
+{
+    mItem = std::make_unique<Video>(filename, parent, this);
+    mItem->Process();
 }
 
 void FaceRecognition::Clear()
@@ -100,13 +106,13 @@ void FaceRecognition::AddDetectedFace(cv::Mat faceImage)
     wxBitmap faceBitmap(faceImage.cols, faceImage.rows, 24);
     ConvertMatBitmapTowxBitmap(faceImage, faceBitmap);
     mDetectedFaces.push_back(faceBitmap);
-    UpdateObservers();
+    //UpdateObservers();
 }
 
 void FaceRecognition::ClearDetectedFaces()
 {
     mDetectedFaces.clear();
-    UpdateObservers();
+    //UpdateObservers();
 }
 
 std::vector<wxBitmap> FaceRecognition::GetDetectedFaces() {
