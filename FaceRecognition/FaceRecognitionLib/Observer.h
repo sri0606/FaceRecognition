@@ -34,7 +34,8 @@ public:
     //void OnDoubleClick(wxMouseEvent& event);
     virtual void OnPaint(wxPaintEvent& event)=0;
 
-    virtual void OnFileOpen(wxCommandEvent& event)=0;
+    virtual void OnImageOpen(wxCommandEvent& event)=0;
+    virtual void OnVideoOpen(wxCommandEvent& event) = 0;
     virtual void OnFileSaveAs(wxCommandEvent& event) =0;
 
     /// This function is called to update any observers
