@@ -8,8 +8,17 @@
 class FaceRecognitionView final : public wxScrolledCanvas, public Observer
 {
 private:
-	virtual void OnPaint(wxPaintEvent& event) override;
 
+	/// The timer that allows for animation
+	wxTimer mTimer;
+
+	/// Stopwatch used to measure elapsed time
+	wxStopWatch mStopWatch;
+
+	/// The last stopwatch time
+	long mTime = 0;
+
+	virtual void OnPaint(wxPaintEvent& event) override;
 
 public:
 	FaceRecognitionView(wxPanel* parent);
@@ -23,4 +32,7 @@ public:
 	virtual void OnImageOpen(wxCommandEvent& event) override;
 	virtual void OnVideoOpen(wxCommandEvent& event) override;
 	virtual void OnFileSaveAs(wxCommandEvent& event) override;
+
+	void OnTimer(wxTimerEvent& event);
+
 };

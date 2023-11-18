@@ -7,6 +7,9 @@
 #include "Observer.h"
 #include "ids.h"
 
+/// Frame duration in milliseconds
+const int FrameDuration = 30;
+
 FaceRecognitionView::FaceRecognitionView(wxPanel* parent) : Observer(parent),
 	wxScrolledCanvas(parent,
 		wxID_ANY)
@@ -18,6 +21,12 @@ FaceRecognitionView::FaceRecognitionView(wxPanel* parent) : Observer(parent),
 	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnFileSaveAs, this, wxID_SAVEAS);
 	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnImageOpen, this, IDM_OPENIMAGE);
 	parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceRecognitionView::OnVideoOpen, this, IDM_OPENVIDEO);
+	Bind(wxEVT_TIMER, &FaceRecognitionView::OnTimer, this);
+
+	mTimer.SetOwner(this);
+	mTimer.Start(FrameDuration);
+
+	mStopWatch.Start();
 }
 
 void FaceRecognitionView::UpdateObserver()
@@ -44,6 +53,10 @@ void FaceRecognitionView::OnImageOpen(wxCommandEvent& event)
 	mFaceRecognition->UpdateObservers();
 }
 
+/**
+ * File>Open menu handler
+ * @param event Menu event
+ */
 void FaceRecognitionView::OnVideoOpen(wxCommandEvent& event)
 {
 	wxFileDialog loadFileDialog(this, L"Load Video", L"", L"",
@@ -65,6 +78,15 @@ void FaceRecognitionView::OnFileSaveAs(wxCommandEvent& event)
 }
 
 /**
+ * Event handler for wxEVT_TIMER
+ * @param event Timer event
+ */
+void FaceRecognitionView::OnTimer(wxTimerEvent& event)
+{
+	mFaceRecognition->UpdateObservers();
+}
+
+/**
  * Paint event, draws the window.
  * @param event Paint event object
  */
@@ -72,6 +94,14 @@ void FaceRecognitionView::OnPaint(wxPaintEvent& event)
 {
 	wxAutoBufferedPaintDC dc(this);
 	DoPrepareDC(dc);
+
+	// Compute the time that has elapsed
+	// since the last call to OnPaint.
+	auto newTime = mStopWatch.Time();
+	auto elapsed = (double)(newTime - mTime) * 0.001;
+	mTime = newTime;
+	if (mFaceRecognition!=nullptr)
+		mFaceRecognition->Update();
 
 	// Clear the image to black
 	wxBrush background(*wxBLACK);
