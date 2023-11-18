@@ -9,6 +9,7 @@
 #include "Observer.h"
 #include "FaceRecognitionView.h"
 #include "../ImageResourcesLib/convertmattowxbmp.h"
+#include "../ImageResourcesLib/ImageMatching.h"
 
 using namespace std;
 
@@ -105,8 +106,16 @@ void FaceRecognition::AddDetectedFace(cv::Mat faceImage)
 {
     wxBitmap faceBitmap(faceImage.cols, faceImage.rows, 24);
     ConvertMatBitmapTowxBitmap(faceImage, faceBitmap);
+    for (auto detectedFace = mDetectedFaces.rbegin(); detectedFace != mDetectedFaces.rend(); ++detectedFace)
+    {
+        if (CompareImagesByHistogram(*detectedFace, faceBitmap)) {
+            return;
+        }
+        else {
+            continue;
+        }
+    }
     mDetectedFaces.push_back(faceBitmap);
-    //UpdateObservers();
 }
 
 void FaceRecognition::ClearDetectedFaces()
@@ -118,4 +127,14 @@ void FaceRecognition::ClearDetectedFaces()
 std::vector<wxBitmap> FaceRecognition::GetDetectedFaces() {
 
     return mDetectedFaces;
+}
+
+/**
+ * Handle updates for animation
+ * @param elapsed The time since the last update
+ */
+void FaceRecognition::Update()
+{
+    if (mItem!=nullptr)
+        mItem->Update();
 }

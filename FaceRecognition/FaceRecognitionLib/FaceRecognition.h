@@ -40,5 +40,7 @@ public:
 	virtual void ClearDetectedFaces();
 	std::vector<wxBitmap> GetDetectedFaces();
 
+	void Update();
+
 	int GetNumofDetectedFaces() { return mDetectedFaces.size(); }
 };
