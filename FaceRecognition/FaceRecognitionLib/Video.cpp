@@ -1,13 +1,11 @@
 #include "pch.h"
 #include "Video.h"
-#include <chrono>
-#include <thread>
 #include <wx/splitter.h>
 #include <wx/graphics.h>
 #include <opencv2/opencv.hpp>
 #include "FaceRecognition.h"
 #include "FaceRecognitionView.h"
-#include "../ImageResourcesLib/convertmattowxbmp.h"
+#include <../ImageResourcesLib/convertmattowxbmp.h>
 
 using namespace cv; 
 
@@ -20,7 +18,6 @@ Video::Video(const wxString& filename, FaceRecognitionView* parent, FaceRecognit
 {
     //parent->Bind(wxEVT_TIMER, &Video::SetCurrentFrame, this);
     //mTimer.SetOwner(parent);
-    
 }
 
 /**
@@ -44,33 +41,39 @@ void Video::Draw(std::shared_ptr<wxGraphicsContext> graphics)
     // Half-width of the window
     int halfWidth = static_cast<int>(contextWidth / 2.0);
 
-
+    auto currentVideoFrame = mFrames[mCurrentFrameIndex];
     // Calculate the scaling factors to fit the video within the context while maintaining aspect ratio
-    double scaleX = halfWidth / static_cast<double>(mCurrentVideoFrame.GetWidth());
-    double scaleY = contextHeight / static_cast<double>(mCurrentVideoFrame.GetHeight());
+    double scaleX = halfWidth / static_cast<double>(currentVideoFrame.GetWidth());
+    double scaleY = contextHeight / static_cast<double>(currentVideoFrame.GetHeight());
     double scaleFactor = std::min(scaleX, scaleY);
 
-    int newWidth = static_cast<int>(mCurrentVideoFrame.GetWidth() * scaleFactor);
-    int newHeight = static_cast<int>(mCurrentVideoFrame.GetHeight() * scaleFactor);
+    int newWidth = static_cast<int>(currentVideoFrame.GetWidth() * scaleFactor);
+    int newHeight = static_cast<int>(currentVideoFrame.GetHeight() * scaleFactor);
 
     // Calculate the position to center the video in the context
     int xPos = halfWidth - newWidth / 2;
     int yPos = static_cast<int>((contextHeight - newHeight) / 2);
 
     // Draw the video frame on the graphics context
-    graphics->DrawBitmap(mCurrentVideoFrame, xPos, yPos, newWidth, newHeight);
+    graphics->DrawBitmap(currentVideoFrame, xPos, yPos, newWidth, newHeight);
 
 }
 
 // Event handler 
-void Video::SetCurrentFrame()//(wxTimerEvent& event)
+void Video::AddCurrentFrame(cv::Mat currentMatFrame)//(wxTimerEvent& event)
 {
-    if (!mCurrentMatframe.empty()) {
-        mCurrentVideoFrame = wxBitmap(mCurrentMatframe.cols, mCurrentMatframe.rows, 24);
-        ConvertMatBitmapTowxBitmap(mCurrentMatframe, mCurrentVideoFrame);
-        mFaceRecognition->UpdateObservers();
+    if (!currentMatFrame.empty()) {
+        auto currentVideoFrame = wxBitmap(currentMatFrame.cols, currentMatFrame.rows, 24);
+        ConvertMatBitmapTowxBitmap(currentMatFrame, currentVideoFrame);
+        mFrames.push_back(currentVideoFrame);
         //mFaceRecognition->ClearDetectedFaces();
     }
+}
+
+void Video::Update()
+{
+    if (mCurrentFrameIndex<mFrames.size()-1)
+        mCurrentFrameIndex++;
 }
     
 /**
@@ -94,27 +97,21 @@ void Video::DetectFaces()
         std::cerr << "Error loading face cascade." << std::endl;
         return;
     }
-    //use fps
-    //mTimer.Start(1000 / 30);
-
-    // Set the desired frames per second
-    const int desiredFPS = 20;
-    const std::chrono::milliseconds frameDelay(1000 / desiredFPS);
 
     while (true) {
         auto start = std::chrono::high_resolution_clock::now();  // Record the start time
-
+        cv::Mat currentMatFrame;
         // Read a frame from the video stream
-        videoCapture >> mCurrentMatframe;
+        videoCapture >> currentMatFrame;
 
         // Break the loop if the video is over
-        if (mCurrentMatframe.empty()) {
+        if (currentMatFrame.empty()) {
             break;
         }
 
         // Convert the frame to grayscale for detection
         cv::Mat gray_frame;
-        cv::cvtColor(mCurrentMatframe, gray_frame, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(currentMatFrame, gray_frame, cv::COLOR_BGR2GRAY);
         cv::equalizeHist(gray_frame, gray_frame);
 
         // Detect faces
@@ -125,29 +122,19 @@ void Video::DetectFaces()
 
         // Loop through the detected faces and draw bounding boxes
         for (const cv::Rect& face : faces) {
-            cv::rectangle(mCurrentMatframe, face, cv::Scalar(0, 0, 255), 1);  // Draw a red rectangle around the face
+            cv::rectangle(currentMatFrame, face, cv::Scalar(0, 0, 255), 1);  // Draw a red rectangle around the face
         }
 
         // Extract and display detected faces (if needed)
         for (size_t i = 0; i < faces.size(); i++) {
             // Crop the detected face region
-            cv::Mat detected_face = mCurrentMatframe(faces[i]);
+            cv::Mat detected_face = currentMatFrame(faces[i]);
             mFaceRecognition->AddDetectedFace(detected_face);
         }
         
-        // Calculate the time taken for processing
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-        // Introduce a delay to achieve the desired FPS
-        auto remainingTime = frameDelay - duration;
-        if (remainingTime > std::chrono::milliseconds(0)) {
-            std::this_thread::sleep_for(remainingTime);
-        }
-
-        SetCurrentFrame();
+        AddCurrentFrame(currentMatFrame);
     }
-    //mTimer.Stop();
+
     // Release the VideoCapture
     videoCapture.release();
 }

@@ -12,10 +12,9 @@ class Video : public Item
 {
 private:
 	//image with the detected faces highlighted
-	wxBitmap mCurrentVideoFrame;
-
-	cv::Mat mCurrentMatframe;
-	//wxTimer mTimer;
+	int mCurrentFrameIndex=0;
+	
+	std::vector<wxBitmap> mFrames;
 	
 public:
 
@@ -23,5 +22,6 @@ public:
 	virtual void Process() override;
 	virtual void Draw(std::shared_ptr<wxGraphicsContext> graphics) override;
 	virtual void DetectFaces() override;
-	void SetCurrentFrame();// wxTimerEvent& event);
+	void AddCurrentFrame(cv::Mat currentMatFrame);
+	virtual void Update() override;
 };
