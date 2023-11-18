@@ -49,4 +49,4 @@ CMakeFiles*
 *.cmake
 
 # sub directories
-ImageResourceLib/
+**ImageResourceLib/
