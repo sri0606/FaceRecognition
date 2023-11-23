@@ -1,6 +1,6 @@
 project(ImageResourcesLib)
 
-set(SOURCE_FILES "convertmattowxbmp.h" "convertmattowxbmp.cpp")
+set(SOURCE_FILES "convertmattowxbmp.h" "convertmattowxbmp.cpp" "ImageMatching.h" "ImageMatching.cpp" "pch.h")
 
 
 set(wxBUILD_PRECOMP OFF)
