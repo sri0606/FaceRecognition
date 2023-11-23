@@ -13,12 +13,13 @@ FaceDetectionView::FaceDetectionView(wxPanel* parent) : Observer(parent),
     wxScrolledCanvas(parent,
         wxID_ANY,
         wxDefaultPosition,
-        wxSize(100, 180),
+        wxSize(100, 150),
         wxBORDER_SIMPLE)
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     Bind(wxEVT_PAINT, &FaceDetectionView::OnPaint, this);
+    parent->GetParent()->Bind(wxEVT_COMMAND_MENU_SELECTED, &FaceDetectionView::OnFileSaveAs, this, wxID_SAVEAS);
     //Bind(wxEVT_LEFT_DOWN, &FaceDetectionView::OnLeftDown, this);
     //Bind(wxEVT_LEFT_UP, &FaceDetectionView::OnLeftUp, this);
     //Bind(wxEVT_MOTION, &FaceDetectionView::OnMouseMove, this);
@@ -55,7 +56,18 @@ void FaceDetectionView::OnVideoOpen(wxCommandEvent& event)
 
 void FaceDetectionView::OnFileSaveAs(wxCommandEvent& event)
 {
+    wxDirDialog saveDialog(this, "Select a Folder to Save Images", "", wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
+
+    if (saveDialog.ShowModal() == wxID_CANCEL) {
+        // The user canceled the operation
+        return;
+    }
+
+    wxString folderPath = saveDialog.GetPath();
+
+    mFaceRecognition->Save(folderPath);
 }
+
 
 
 /**

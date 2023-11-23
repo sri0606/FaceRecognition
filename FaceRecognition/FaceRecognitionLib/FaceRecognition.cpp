@@ -4,6 +4,7 @@
 #include <wx/splitter.h>
 #include <wx/dcbuffer.h>
 #include <wx/graphics.h>
+#include <wx/filename.h>
 #include "Image.h"
 #include "Video.h"
 #include "Observer.h"
@@ -30,14 +31,12 @@ void FaceRecognition::OnDraw(std::shared_ptr<wxGraphicsContext> graphics)
     // Set the background color
     graphics->SetBrush(wxBrush(wxColour(0, 255, 0)));
     graphics->SetPen(*wxTRANSPARENT_PEN);  // Set a transparent pen or remove border
-    //graphics->DrawRectangle(0, 0, GetSize().x, GetSize().y);  // Draw a filled rectangle
-
+    
     wxFont font(wxSize(0, 20),
         wxFONTFAMILY_SWISS,
         wxFONTSTYLE_NORMAL,
         wxFONTWEIGHT_NORMAL);
     graphics->SetFont(font, *wxBLACK);  // Set the font and text color
-    graphics->DrawText(L"Under the Sea!", 10, 10);
 
     if (mItem != nullptr) {
         mItem->Draw(graphics);
@@ -47,9 +46,37 @@ void FaceRecognition::OnDraw(std::shared_ptr<wxGraphicsContext> graphics)
 
 
 /**
+* Save detected faces
 */
-void FaceRecognition::Save(const wxString& filename)
+void FaceRecognition::Save(const wxString& folderPath)
 {
+    wxImage image;
+    int i = 1;
+
+    // Create a subfolder in the selected folder
+    wxString subfolderName = wxFileName(mItem->GetPath()).GetName();
+    wxString subfolderPath = folderPath+"\\"+ subfolderName;
+ 
+
+    if (!wxFileName::DirExists(subfolderPath) && !wxFileName::Mkdir(subfolderPath, wxS_DIR_DEFAULT)) {
+        wxMessageBox("Failed to create the folder.", "Error", wxICON_ERROR | wxOK);
+        return;
+    }
+
+    for (wxBitmap detectedFace : mDetectedFaces) {
+        image = detectedFace.ConvertToImage();
+
+        wxString filename = wxString::Format(L"detected_face_%d.png", i);
+        wxString filePath = subfolderPath +"\\" + filename;
+
+        if (!image.SaveFile(filePath, wxBITMAP_TYPE_PNG)) {
+            // Handle the error, e.g., show an error message
+            wxMessageBox("Failed to save image.", "Error", wxICON_ERROR | wxOK);
+            return;
+        }
+        i++;
+    }
+    wxMessageBox("Images saved successfully.", "Success", wxICON_INFORMATION | wxOK);
 }
 
 void FaceRecognition::LoadImage(FaceRecognitionView* parent,const wxString& filename)
@@ -108,7 +135,7 @@ void FaceRecognition::AddDetectedFace(cv::Mat faceImage)
     ConvertMatBitmapTowxBitmap(faceImage, faceBitmap);
     for (auto detectedFace = mDetectedFaces.rbegin(); detectedFace != mDetectedFaces.rend(); ++detectedFace)
     {
-        if (CompareImagesByHistogram(*detectedFace, faceBitmap)) {
+        if (CompareImagesByHistogram(*detectedFace, faceBitmap) || CompareImagesByFeatureMatching(*detectedFace, faceBitmap)) {
             return;
         }
         else {
