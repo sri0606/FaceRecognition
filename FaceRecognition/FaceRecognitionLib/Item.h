@@ -33,4 +33,11 @@ public:
      * @return Pointer to FaceRecognition object
      */
     virtual void SetFaceRecognition(FaceRecognition* facrec) { mFaceRecognition=facrec; }
+
+    /**
+    Getter for item path
+    */
+    wxString GetPath() { return mPath; }
+
+    virtual void Update() {};
 };
