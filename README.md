@@ -17,10 +17,7 @@ Our application boasts a user-friendly interface and combines simplicity with po
 
 ### Data Privacy Analysis (Upcoming)
 
-In the future, we plan to expand the application's functionality to include data privacy analysis. Our vision is to empower users to understand how much information can be associated with the faces and objects detected in various media elements. This feature is aimed at individuals, organizations, and researchers seeking to evaluate privacy risks and compliance.
-
-### Integration with External APIs (Upcoming)
-
+In the future, plan is to expand the application's functionality to include data privacy analysis. This application's vision is to empower users to understand how much information can be associated with the faces and objects detected in various media elements. 
 To enhance the privacy analysis capabilities, we intend to integrate the application with external APIs such as Google's Vision API and SerpAPI. These APIs will enable us to scrape the internet for relevant data linked to the detected faces and objects, ensuring that users receive comprehensive and up-to-date information.
 
 ## Goals
@@ -35,23 +32,8 @@ Our application has two primary goals:
 
 Our vision for the application extends beyond face recognition. We aim to build a comprehensive privacy analysis tool that informs users about the safety of their information and quantifies the extent to which their data is available online. The motivation behind this tool is to highlight the potential risks of data collection and misuse, which can have harmful consequences if employed for unethical purposes. By providing source links and URLs related to public data, our goal is to empower users to make informed decisions about how and where their personal data is exposed.
 
-## Contribution
-
-We welcome contributions from developers and anyone interested in enhancing this application. Feel free to fork the repository, submit pull requests, or open issues to help us improve the tool and achieve its objectives.
-
-Thank you for your interest in the Face Recognition and Privacy Analysis Tool. Together, we can make a difference in understanding and addressing data privacy issues related to facial recognition.
-
-## Dependencies
-
-The application relies on several key dependencies to function effectively:
-
-- **OpenCV**: An open-source computer vision and machine learning software library that provides essential tools for image and video analysis.
-
-- **wxWidgets**: A powerful C++ library for creating native graphical user interfaces (GUIs) across multiple platforms.
-
-- **C++**: The core programming language used for developing the application.
   
-### A preview of user-interface of current version
+### A preview of user-interface of current wx-widget GUI version
 <img src="FaceRecognition/images/testimage_results.png" width="800" height="400" alt="Image">
 
 ## License
